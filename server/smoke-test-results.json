@@ -1,0 +1,56 @@
+[
+  {
+    "Endpoint": "POST /auth/login",
+    "Status": 200,
+    "ResponseTime": "433ms",
+    "Notes": "{\"statusCode\":200,\"data\":{\"token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhMmIwNWVjZTFhMzA2ZTlmZjIyYTY2NSIsImlhdCI6MTc4MTIwNDY0MSwiZXhwIjoxNzgxODA5NDQxfQ.GpW5MhBDBjxZQO3vZOv9iEQSsaxiWNpQiaeGus2LLvw\",\"user\":{\"_id\":\"6a2b05ece1a306e9ff22a665\",\"name\":\"Student Bob\",\"email\":\"student@test.com\",\"role\":\"student\",\"avatar\":\"\"}},\"message\":\"User logged in successfully\",\"success\":true}"
+  },
+  {
+    "Endpoint": "GET /auth/me",
+    "Status": 200,
+    "ResponseTime": "11ms",
+    "Notes": "Success. User: Student Bob"
+  },
+  {
+    "Endpoint": "GET /courses",
+    "Status": 200,
+    "ResponseTime": "21ms",
+    "Notes": "Success. Found 2 courses."
+  },
+  {
+    "Endpoint": "GET /courses/:id",
+    "Status": 200,
+    "ResponseTime": "5ms",
+    "Notes": "Success. Course details loaded."
+  },
+  {
+    "Endpoint": "GET /challenges",
+    "Status": 200,
+    "ResponseTime": "8ms",
+    "Notes": "Success. Found 10 challenges."
+  },
+  {
+    "Endpoint": "GET /challenges/:id",
+    "Status": 200,
+    "ResponseTime": "3ms",
+    "Notes": "Success. Challenge loaded."
+  },
+  {
+    "Endpoint": "POST /challenges/:id/run",
+    "Status": 200,
+    "ResponseTime": "1271ms",
+    "Notes": "Success. Status: compilation_error"
+  },
+  {
+    "Endpoint": "POST /ai/chat",
+    "Status": 200,
+    "ResponseTime": "16ms",
+    "Notes": "Success. AI replied."
+  },
+  {
+    "Endpoint": "GET /leaderboard",
+    "Status": 200,
+    "ResponseTime": "10ms",
+    "Notes": "Success. Leaderboard loaded."
+  }
+]

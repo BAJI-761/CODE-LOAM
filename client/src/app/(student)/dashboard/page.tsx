@@ -53,21 +53,21 @@ export default function StudentDashboard() {
         </Card>
         
         <Card variant="extruded" className="bg-background">
-          <CardContent className="p-6 flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="h-12 w-12 rounded-xl bg-accent-secondary/10 flex items-center justify-center text-accent-secondary shrink-0">
-                <CheckCircle className="h-6 w-6" />
-              </div>
-              <div>
-                <p className="text-sm text-muted font-medium">Completed</p>
+          <CardContent className="p-6 flex items-center gap-4">
+            <div className="h-12 w-12 rounded-xl bg-accent-secondary/10 flex items-center justify-center text-accent-secondary shrink-0">
+              <CheckCircle className="h-6 w-6" />
+            </div>
+            <div>
+              <p className="text-sm text-muted font-medium">Completed</p>
+              <div className="flex items-baseline gap-3">
                 <h3 className="text-2xl font-bold text-foreground">{completedCount}</h3>
+                {completedCount > 0 && (
+                  <Link href="/certificates" className="text-xs text-accent font-medium hover:underline flex items-center">
+                    View Certificates <ChevronRight className="w-3 h-3 ml-0.5" />
+                  </Link>
+                )}
               </div>
             </div>
-            {completedCount > 0 && (
-              <Link href="/certificates" className="text-sm text-accent font-medium hover:underline flex items-center">
-                View Certificates <ChevronRight className="w-4 h-4 ml-1" />
-              </Link>
-            )}
           </CardContent>
         </Card>
 

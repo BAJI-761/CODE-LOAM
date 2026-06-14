@@ -47,7 +47,7 @@ export default function LessonPage({ params }: { params: any }) {
     return <div>Course not found</div>
   }
 
-  const { course, progress } = data
+  const { course, enrollment: progress } = data
   
   // Find current lesson and adjacent lessons
   let currentLesson = null

@@ -51,8 +51,8 @@ export default function LearnLayout({
     )
   }
 
-  const { course, progress } = data
-  const progressPercent = progress ? progress.progressPercentage : 0
+  const { course, enrollment: progress } = data
+  const progressPercent = progress ? progress.completionPercentage : 0
 
   return (
     <div className="flex flex-col h-screen overflow-hidden bg-background">

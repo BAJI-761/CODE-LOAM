@@ -49,8 +49,9 @@ export function useUpdateProgress() {
       const res = await api.put(`/courses/${courseId}/progress`, { lessonId, completed });
       return res.data;
     },
-    onSuccess: () => {
+    onSuccess: (_, variables) => {
       qc.invalidateQueries({ queryKey: ['course'] });
+      qc.invalidateQueries({ queryKey: ['courseLearn', variables.courseId] });
       qc.invalidateQueries({ queryKey: ['myEnrollments'] });
     }
   });

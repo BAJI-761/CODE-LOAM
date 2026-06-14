@@ -82,14 +82,14 @@ export function CourseCard({ course, variant = "default", progress }: CourseCard
         </CardContent>
 
         <CardFooter className="pt-4 pb-4 border-t border-muted/10 flex items-center justify-between mt-auto">
-          <div className="flex items-center gap-2">
-            <Avatar size="sm">
+          <div className="flex items-center gap-2 min-w-0">
+            <Avatar size="sm" className="shrink-0">
               <AvatarImage src={course.instructor.avatar} />
               <AvatarFallback>{course.instructor.name.charAt(0)}</AvatarFallback>
             </Avatar>
-            <span className="text-xs font-medium text-foreground">{course.instructor.name}</span>
+            <span className="text-xs font-medium text-foreground truncate">{course.instructor.name}</span>
           </div>
-          <div className="flex items-center gap-3 text-xs text-muted">
+          <div className="flex items-center gap-3 text-xs text-muted shrink-0">
             <div className="flex items-center gap-1">
               <Users className="h-3 w-3" />
               <span>{course.enrollmentCount}</span>

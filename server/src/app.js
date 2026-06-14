@@ -9,6 +9,9 @@ const { generalLimiter, aiLimiter } = require('./middleware/rateLimiter');
 
 const app = express();
 
+// Trust proxy for rate limiter to work correctly behind Render/Vercel load balancers
+app.set('trust proxy', 1);
+
 // Global Middlewares
 app.use(helmet());
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));

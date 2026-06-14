@@ -48,8 +48,24 @@ export default async function CoursesPage({ searchParams }: { searchParams: any 
   
   const response = await getCourses(resolvedSearchParams)
   const { items: courses, total, page, limit } = response.data
+  const currentPage = Number(page) || 1
   
   const totalPages = Math.ceil(total / limit)
+
+  const createPageUrl = (newPage: number) => {
+    const params = new URLSearchParams()
+    Object.keys(resolvedSearchParams).forEach(key => {
+      if (key === 'page') return
+      const value = resolvedSearchParams[key]
+      if (Array.isArray(value)) {
+        value.forEach(v => params.append(key, v))
+      } else if (value) {
+        params.set(key, value)
+      }
+    })
+    params.set('page', newPage.toString())
+    return `/courses?${params.toString()}`
+  }
 
   return (
     <div className="bg-background min-h-screen">
@@ -94,17 +110,17 @@ export default async function CoursesPage({ searchParams }: { searchParams: any 
                   
                   {totalPages > 1 && (
                     <div className="pt-8 flex justify-center gap-2">
-                      {page > 1 && (
+                      {currentPage > 1 && (
                         <Button variant="secondary" asChild>
-                          <Link href={`/courses?page=${page - 1}`}>Previous</Link>
+                          <Link href={createPageUrl(currentPage - 1)}>Previous</Link>
                         </Button>
                       )}
-                      <span className="flex items-center px-4 font-medium">
-                        Page {page} of {totalPages}
+                      <span className="flex items-center px-4 font-medium text-muted-foreground">
+                        Page {currentPage} of {totalPages}
                       </span>
-                      {page < totalPages && (
+                      {currentPage < totalPages && (
                         <Button variant="secondary" asChild>
-                          <Link href={`/courses?page=${page + 1}`}>Next</Link>
+                          <Link href={createPageUrl(currentPage + 1)}>Next</Link>
                         </Button>
                       )}
                     </div>

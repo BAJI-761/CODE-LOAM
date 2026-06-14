@@ -28,6 +28,7 @@ export function Navbar() {
   }, [])
 
   const navLinks = [
+    { href: "/", label: "Home" },
     { href: "/courses", label: "Courses" },
     { href: "/challenges", label: "Challenges" },
     { href: "/about", label: "About" },

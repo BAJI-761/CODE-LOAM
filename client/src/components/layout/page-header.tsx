@@ -21,29 +21,34 @@ export function PageHeader({
   return (
     <div 
       className={cn(
-        "flex flex-col md:flex-row md:items-start justify-between gap-4 pb-6 mb-6 shadow-inset-sm",
+        "relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-6 p-8 md:p-10 mb-8 rounded-3xl bg-background/40 backdrop-blur-xl border border-muted/20 shadow-glass",
         className
       )}
       {...props}
     >
-      <div className="flex flex-col gap-2 min-w-0">
+      {/* Decorative background glows */}
+      <div className="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-accent-secondary/5 -z-10 pointer-events-none" />
+      <div className="absolute -top-24 -right-24 w-64 h-64 bg-accent/10 rounded-full blur-3xl -z-10 pointer-events-none" />
+      <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-accent-secondary/10 rounded-full blur-3xl -z-10 pointer-events-none" />
+
+      <div className="flex flex-col gap-3 min-w-0 z-10">
         {breadcrumbs && (
-          <div className="text-sm text-muted mb-1">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-background/50 text-xs font-medium text-muted-foreground mb-2 border border-muted/20 w-fit backdrop-blur-md shadow-inset-sm">
             {breadcrumbs}
           </div>
         )}
-        <h1 className="text-3xl md:text-4xl font-bold font-display text-foreground tracking-tight">
+        <h1 className="text-3xl md:text-5xl font-bold font-display tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-foreground to-foreground/70 pb-1">
           {title}
         </h1>
         {(subtitle || description) && (
-          <p className="text-base text-muted max-w-2xl">
+          <p className="text-base md:text-lg text-muted max-w-2xl mt-1">
             {subtitle || description}
           </p>
         )}
       </div>
       
       {actions && (
-        <div className="flex items-center gap-3 shrink-0">
+        <div className="flex items-center gap-3 shrink-0 z-10 mt-2 md:mt-0">
           {actions}
         </div>
       )}

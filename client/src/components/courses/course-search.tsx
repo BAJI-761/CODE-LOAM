@@ -13,6 +13,7 @@ export function CourseSearch() {
   
   const [searchTerm, setSearchTerm] = useState(initialSearch)
   const isInitialMount = useRef(true)
+  const previousSearchTerm = useRef(initialSearch)
 
   useEffect(() => {
     if (isInitialMount.current) {
@@ -20,7 +21,13 @@ export function CourseSearch() {
       return
     }
 
+    // Only trigger if the search term actually changed
+    if (searchTerm === previousSearchTerm.current) {
+      return
+    }
+
     const timer = setTimeout(() => {
+      previousSearchTerm.current = searchTerm
       const params = new URLSearchParams(searchParams.toString())
       if (searchTerm) {
         params.set("search", searchTerm)
@@ -28,7 +35,7 @@ export function CourseSearch() {
         params.delete("search")
       }
       params.delete("page") // Reset to page 1 on search
-      router.push(`${pathname}?${params.toString()}`)
+      router.push(`${pathname}?${params.toString()}`, { scroll: false })
     }, 300) // 300ms debounce
 
     return () => clearTimeout(timer)
@@ -36,7 +43,9 @@ export function CourseSearch() {
 
   // Sync with URL changes if user clears via the Clear All button
   useEffect(() => {
-    setSearchTerm(searchParams.get("search") || "")
+    const currentSearch = searchParams.get("search") || ""
+    setSearchTerm(currentSearch)
+    previousSearchTerm.current = currentSearch
   }, [searchParams])
 
   return (

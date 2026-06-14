@@ -26,7 +26,7 @@ export function useEnroll() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (courseId: string) => {
-      const res = await api.post(`/courses/${courseId}/enroll`);
+      const res = await api.post(`/enrollments/${courseId}`);
       return res.data;
     },
     onSuccess: () => {

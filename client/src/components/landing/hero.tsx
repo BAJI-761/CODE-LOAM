@@ -8,7 +8,7 @@ import { Container } from "@/components/layout/container"
 
 export function HeroSection() {
   return (
-    <Section className="relative overflow-hidden pt-24 pb-32 md:pt-32 md:pb-40">
+    <Section className="relative overflow-hidden pt-8 pb-32 md:pt-12 md:pb-40">
       {/* Dynamic Background Elements */}
       <div className="absolute inset-0 bg-grid-pattern opacity-5 mix-blend-overlay"></div>
       <Ornament variant="circle" size="lg" className="absolute -top-24 -right-24 text-accent/10 opacity-50 blur-3xl" />

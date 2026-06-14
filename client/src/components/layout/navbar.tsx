@@ -27,8 +27,12 @@ export function Navbar() {
     setMounted(true)
   }, [])
 
+  const homeHref = mounted && isAuthenticated && user 
+    ? (user.role === 'instructor' ? '/instructor/dashboard' : '/dashboard') 
+    : '/';
+
   const navLinks = [
-    { href: "/", label: "Home" },
+    { href: homeHref, label: "Home" },
     { href: "/courses", label: "Courses" },
     { href: "/challenges", label: "Challenges" },
     { href: "/about", label: "About" },
@@ -38,7 +42,7 @@ export function Navbar() {
     <header className="sticky top-0 z-50 w-full bg-background/80 backdrop-blur-md shadow-inset-sm border-b-0 h-16 md:h-20">
       <Container className="h-full flex items-center justify-between">
         {/* Left: Logo */}
-        <Link href="/" className="flex items-center gap-2 group">
+        <Link href={homeHref} className="flex items-center gap-2 group">
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-accent to-accent-secondary flex items-center justify-center text-white shadow-glow transition-transform group-hover:scale-105">
             <Sparkles className="w-4 h-4" />
           </div>

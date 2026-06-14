@@ -22,6 +22,11 @@ if (process.env.NODE_ENV === 'development') {
 // Apply general rate limiter to all requests
 app.use('/api', generalLimiter);
 
+// Root Route (helps prevent 404 logs from pinging services like Render)
+app.get('/', (req, res) => {
+  res.status(200).json({ status: 'OK', message: 'CodeLoom API is running' });
+});
+
 // Health Check Route
 app.get('/health', (req, res) => {
   res.status(200).json({ status: 'OK', message: 'Server is running' });

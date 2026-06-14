@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Download, Loader2 } from 'lucide-react';
 import { CertificateTemplate } from './CertificateTemplate';
-import html2canvas from 'html2canvas';
+import { toPng } from 'html-to-image';
 import { jsPDF } from 'jspdf';
 import { format } from 'date-fns';
 
@@ -49,16 +49,12 @@ export function CertificateDownload({ certificate }: CertificateDownloadProps) {
     try {
       await new Promise(resolve => setTimeout(resolve, 100));
 
-      const canvas = await html2canvas(certRef.current, {
-        scale: 2,
-        useCORS: true,
+      const imgData = await toPng(certRef.current, {
+        quality: 1,
+        pixelRatio: 2,
         backgroundColor: '#FEFCF8',
-        logging: false,
-        windowWidth: 1123,
-        windowHeight: 794,
       });
       
-      const imgData = canvas.toDataURL('image/png');
       const pdf = new jsPDF({
         orientation: 'landscape',
         unit: 'mm',

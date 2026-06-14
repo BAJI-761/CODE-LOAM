@@ -75,6 +75,7 @@ app.use('/api/v1/ai', aiLimiter, aiRoutes);
 
 // Handle 404 (Not Found)
 app.use((req, res, next) => {
+  console.error(`[404] Route not found: ${req.method} ${req.originalUrl}`);
   next(new ApiError(404, 'Route not found'));
 });
 

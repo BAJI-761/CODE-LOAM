@@ -45,14 +45,14 @@ export function HeroSection() {
 
           {/* Image Content */}
           <div className="flex-1 w-full max-w-lg lg:max-w-none relative">
-            <div className="relative aspect-square w-full">
-              <div className="absolute inset-0 bg-gradient-to-tr from-accent/20 to-accent-secondary/20 rounded-full blur-3xl opacity-50 animate-blob"></div>
+            <div className="relative aspect-square w-full max-h-[600px] lg:max-h-none">
+              <div className="absolute -inset-4 bg-gradient-to-tr from-accent/30 to-accent-secondary/30 rounded-[3rem] blur-2xl opacity-50 animate-pulse"></div>
               <Image 
                 src="/assets/hero-character.png" 
-                alt="AI Coder Character" 
+                alt="Students learning to code" 
                 fill
                 priority
-                className="object-contain relative z-10 drop-shadow-2xl animate-float"
+                className="object-cover relative z-10 rounded-[2.5rem] shadow-2xl border border-border/50"
                 sizes="(max-width: 768px) 100vw, 50vw"
               />
             </div>

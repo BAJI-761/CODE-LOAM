@@ -64,7 +64,7 @@ export function EnrolledCourseCard({ enrollment }: EnrolledCourseCardProps) {
           <Link href={`/courses/${course._id}/learn`} className="w-full block">
             <Button 
               className="w-full rounded-xl" 
-              variant={isCompleted ? "outline" : "default"}
+              variant={isCompleted ? "inset" : "default"}
             >
               <PlayCircle className="w-4 h-4 mr-2" />
               {isCompleted ? "Review Course" : progressValue > 0 ? "Continue Learning" : "Start Course"}

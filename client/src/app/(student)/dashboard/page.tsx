@@ -14,16 +14,14 @@ export default function StudentDashboard() {
   const { user } = useAuth()
   const { data: enrollments, isLoading } = useMyEnrollments()
 
-  const completedCount = enrollments?.filter((e: any) => e.isCompleted).length || 0
+  const completedCount = enrollments?.filter((e: any) => e.status === 'completed' || e.completionPercentage === 100).length || 0
   const activeCount = (enrollments?.length || 0) - completedCount
 
   let totalLearningHours = 0
   enrollments?.forEach((e: any) => {
     // Rough estimate based on progress
-    if (e.course?.modules) {
-      const courseTotalMins = e.course.modules.reduce((acc: number, mod: any) => {
-        return acc + mod.lessons.reduce((lAcc: number, l: any) => lAcc + (l.duration || 0), 0)
-      }, 0)
+    if (e.course) {
+      const courseTotalMins = (e.course.totalLessons || 10) * 15
       totalLearningHours += (courseTotalMins * ((e.completionPercentage || 0) / 100)) / 60
     }
   })

@@ -74,30 +74,44 @@ exports.getCourseForLearning = asyncHandler(async (req, res) => {
   }, 'Course learning payload'));
 });
 
-// PUT /api/v1/courses/:id/progress { moduleIndex, lessonIndex }
+// PUT /api/v1/courses/:id/progress { lessonId, completed }
 exports.updateProgress = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { moduleIndex, lessonIndex } = req.body;
+  const { lessonId, completed } = req.body;
 
   const enrollment = await Enrollment.findOne({ course: id, student: req.user._id });
   if (!enrollment) throw new ApiError(404, 'Enrollment not found');
 
   // Check if already completed
-  const alreadyCompleted = enrollment.completedLessons.some(
-    (cl) => cl.moduleIndex === moduleIndex && cl.lessonIndex === lessonIndex
-  );
+  const alreadyCompleted = enrollment.completedLessons.includes(lessonId);
 
-  if (!alreadyCompleted) {
-    enrollment.completedLessons.push({ moduleIndex, lessonIndex, completedAt: new Date() });
+  if (completed && !alreadyCompleted) {
+    enrollment.completedLessons.push(lessonId);
+  } else if (!completed && alreadyCompleted) {
+    enrollment.completedLessons = enrollment.completedLessons.filter(lid => lid.toString() !== lessonId.toString());
   }
 
-  // Update last accessed
-  enrollment.lastAccessedModule = moduleIndex;
-  enrollment.lastAccessedLesson = lessonIndex;
   enrollment.lastAccessedAt = new Date();
 
-  // Calculate completion percentage
   const course = await Course.findById(id);
+  if (!course) throw new ApiError(404, 'Course not found');
+
+  // Find module/lesson indices
+  let foundModuleIndex = 0;
+  let foundLessonIndex = 0;
+  course.modules.forEach((mod, mIdx) => {
+    mod.lessons.forEach((les, lIdx) => {
+      if (les._id.toString() === lessonId.toString()) {
+        foundModuleIndex = mIdx;
+        foundLessonIndex = lIdx;
+      }
+    });
+  });
+
+  enrollment.lastAccessedModule = foundModuleIndex;
+  enrollment.lastAccessedLesson = foundLessonIndex;
+
+  // Calculate completion percentage
   const totalLessons = course.totalLessons || course.modules.reduce((acc, m) => acc + (m.lessons?.length || 0), 0);
 
   if (totalLessons > 0) {
@@ -110,6 +124,9 @@ exports.updateProgress = asyncHandler(async (req, res) => {
     enrollment.status = 'completed';
     enrollment.completedAt = new Date();
     isNewlyCompleted = true;
+  } else if (enrollment.completionPercentage < 100 && enrollment.status === 'completed') {
+    enrollment.status = 'active';
+    enrollment.completedAt = null;
   }
 
   await enrollment.save();

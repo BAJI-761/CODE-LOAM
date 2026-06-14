@@ -13,9 +13,7 @@ const EnrollmentSchema = new mongoose.Schema({
     required: true,
   },
   completedLessons: [{
-    moduleIndex: Number,
-    lessonIndex: Number,
-    completedAt: { type: Date, default: Date.now },
+    type: mongoose.Schema.Types.ObjectId
   }],
   completionPercentage: { type: Number, default: 0 },
   lastAccessedModule: { type: Number, default: 0 },

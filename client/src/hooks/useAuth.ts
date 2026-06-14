@@ -36,8 +36,8 @@ export const useAuth = () => {
     const fetchMe = async () => {
       try {
         const response = await api.get("/auth/me");
-        if (response.data?.success && response.data?.data?.user) {
-          setUser(response.data.data.user);
+        if (response?.success && response?.data?.user) {
+          setUser(response.data.user);
         } else {
           logout();
         }

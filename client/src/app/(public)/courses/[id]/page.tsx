@@ -110,10 +110,11 @@ export default async function CourseDetailPage({ params }: { params: any }) {
               <div className="w-full aspect-video relative rounded-3xl overflow-hidden shadow-inset p-2">
                 <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-extruded bg-muted/10">
                   <Image 
-                    src={course.thumbnailUrl || "https://picsum.photos/seed/codeloom/1200/800"} 
+                    src={course.thumbnailUrl || "/assets/course-banner.png"} 
                     alt={course.title}
                     fill
                     className="object-cover"
+                    sizes="(max-width: 1024px) 100vw, 66vw"
                     priority
                   />
                 </div>

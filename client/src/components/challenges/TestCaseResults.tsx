@@ -17,7 +17,7 @@ export default function TestCaseResults({ results, sourceCode, language, challen
   const { openPanel } = useAIStore();
   const { mutate: explainError, isPending: isLoading } = useExplainError();
 
-  if (!results || results.length === 0) {
+  if (!results || !Array.isArray(results) || results.length === 0) {
     return <div className="text-sm text-muted">No results yet. Run or submit to see details.</div>;
   }
 

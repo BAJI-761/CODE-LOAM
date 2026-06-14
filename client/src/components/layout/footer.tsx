@@ -1,7 +1,7 @@
 import * as React from "react"
 import Link from "next/link"
 import { Container } from "./container"
-import { Github, Twitter, Linkedin } from "lucide-react"
+import { Globe, MessageSquare, BookOpen } from "lucide-react"
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
@@ -65,15 +65,15 @@ export function Footer() {
           <div className="flex items-center gap-4">
             <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-muted hover:text-accent transition-colors">
               <span className="sr-only">Twitter</span>
-              <Twitter className="h-5 w-5" />
+              <MessageSquare className="h-5 w-5" />
             </a>
             <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="text-muted hover:text-accent transition-colors">
               <span className="sr-only">GitHub</span>
-              <Github className="h-5 w-5" />
+              <Globe className="h-5 w-5" />
             </a>
             <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-muted hover:text-accent transition-colors">
               <span className="sr-only">LinkedIn</span>
-              <Linkedin className="h-5 w-5" />
+              <BookOpen className="h-5 w-5" />
             </a>
           </div>
         </div>

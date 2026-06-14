@@ -20,11 +20,13 @@ import LanguageSelector from "@/components/challenges/LanguageSelector"
 import ChallengeDescription from "@/components/challenges/ChallengeDescription"
 import TestCaseResults from "@/components/challenges/TestCaseResults"
 import { toast } from "sonner"
-import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels"
+import { Panel, Group as PanelGroup, Separator as PanelResizeHandle } from "react-resizable-panels"
 import { useAIStore } from "@/stores/ai-store"
 import { useAIHint } from "@/hooks/use-ai"
 
-export default function ChallengeWorkspacePage({ params }: { params: { id: string } }) {
+export default function ChallengeWorkspacePage({ params }: { params: Promise<{ id: string }> }) {
+  const unwrappedParams = React.use(params)
+  const paramsId = unwrappedParams.id
   const [language, setLanguage] = React.useState<string>("javascript")
   const [sourceCode, setSourceCode] = React.useState<string>("")
   const [results, setResults] = React.useState<any>(null)
@@ -33,27 +35,27 @@ export default function ChallengeWorkspacePage({ params }: { params: { id: strin
   const { mutate: getHint, isPending: aiLoading } = useAIHint()
 
   const { data: challenge, isLoading } = useQuery({
-    queryKey: ['challenge', params.id],
+    queryKey: ['challenge', paramsId],
     queryFn: async () => {
-      const res = await api.get(`/challenges/${params.id}`)
-      return res.data.data
+      const res = await api.get(`/challenges/${paramsId}`)
+      return res.data || null
     }
   })
 
   const { data: submissions } = useQuery({
-    queryKey: ['challenge-submissions', params.id],
+    queryKey: ['challenge-submissions', paramsId],
     queryFn: async () => {
-      const res = await api.get(`/challenges/${params.id}/submissions`)
-      return res.data.data
+      const res = await api.get(`/challenges/${paramsId}/submissions`)
+      return res.data || []
     }
   })
 
   // Load starter code and language from localStorage or challenge data
   React.useEffect(() => {
     if (challenge && !sourceCode) {
-      const storedLang = localStorage.getItem(`lang-${params.id}`) || challenge.allowedLanguages?.[0] || 'javascript'
+      const storedLang = localStorage.getItem(`lang-${paramsId}`) || challenge.allowedLanguages?.[0] || 'javascript'
       setLanguage(storedLang)
-      const storedCode = localStorage.getItem(`code-${params.id}-${storedLang}`)
+      const storedCode = localStorage.getItem(`code-${paramsId}-${storedLang}`)
       if (storedCode) {
         setSourceCode(storedCode)
       } else {
@@ -64,20 +66,20 @@ export default function ChallengeWorkspacePage({ params }: { params: { id: strin
 
   const handleLanguageChange = (lang: string) => {
     setLanguage(lang)
-    localStorage.setItem(`lang-${params.id}`, lang)
-    const storedCode = localStorage.getItem(`code-${params.id}-${lang}`)
+    localStorage.setItem(`lang-${paramsId}`, lang)
+    const storedCode = localStorage.getItem(`code-${paramsId}-${lang}`)
     setSourceCode(storedCode || challenge?.starterCode?.[lang] || "")
   }
 
   const handleCodeChange = (code: string) => {
     setSourceCode(code)
-    localStorage.setItem(`code-${params.id}-${language}`, code)
+    localStorage.setItem(`code-${paramsId}-${language}`, code)
   }
 
   const runMutation = useMutation({
     mutationFn: async () => {
-      const res = await api.post(`/challenges/${params.id}/run`, { code: sourceCode, language })
-      return res.data.data
+      const res = await api.post(`/challenges/${paramsId}/run`, { code: sourceCode, language })
+      return res.data || []
     },
     onSuccess: (data) => {
       setResults(data)
@@ -89,8 +91,8 @@ export default function ChallengeWorkspacePage({ params }: { params: { id: strin
 
   const submitMutation = useMutation({
     mutationFn: async () => {
-      const res = await api.post(`/challenges/${params.id}/submit`, { code: sourceCode, language })
-      return res.data.data
+      const res = await api.post(`/challenges/${paramsId}/submit`, { code: sourceCode, language })
+      return res.data || null
     },
     onSuccess: (data) => {
       setResults(data)
@@ -105,21 +107,19 @@ export default function ChallengeWorkspacePage({ params }: { params: { id: strin
 
   const handleAIHint = () => {
     openPanel()
-    getHint({ challengeId: params.id, code: sourceCode, language })
+    getHint({ challengeId: paramsId, code: sourceCode, language })
   }
 
   const handleReset = () => {
     if (confirm("Are you sure you want to reset to the starter code?")) {
       const defaultCode = challenge?.starterCode?.[language] || ""
       setSourceCode(defaultCode)
-      localStorage.setItem(`code-${params.id}-${language}`, defaultCode)
+      localStorage.setItem(`code-${paramsId}-${language}`, defaultCode)
     }
   }
 
   const handleSubmitClick = () => {
-    if (confirm("Submit your solution?")) {
-      submitMutation.mutate()
-    }
+    submitMutation.mutate()
   }
 
   if (isLoading) return <div className="flex justify-center py-20"><Loader2 className="animate-spin w-8 h-8 text-muted" /></div>
@@ -146,8 +146,9 @@ export default function ChallengeWorkspacePage({ params }: { params: { id: strin
         <PanelGroup direction="horizontal" className="hidden xl:flex w-full h-full gap-2">
           
           {/* Left Panel */}
-          <Panel defaultSize={40} minSize={25} className="flex flex-col gap-4 min-h-0">
-            <Card variant="extruded" className="flex-1 flex flex-col overflow-hidden">
+          <Panel defaultSize={40} minSize={25} className="flex flex-col gap-4 min-h-0 relative">
+            <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-accent-secondary/5 rounded-3xl -z-10 blur-xl"></div>
+            <Card variant="extruded" className="flex-1 flex flex-col overflow-hidden bg-background/80 backdrop-blur-md border-white/5">
               <Tabs defaultValue="description" className="flex-1 flex flex-col overflow-hidden">
                 <TabsList className="w-full justify-start border-b border-muted/10 p-0 h-12 bg-background/50 shrink-0">
                   <TabsTrigger value="description" className="data-[state=active]:border-b-2 data-[state=active]:border-accent rounded-none">Description</TabsTrigger>
@@ -216,10 +217,11 @@ export default function ChallengeWorkspacePage({ params }: { params: { id: strin
           </PanelResizeHandle>
 
           {/* Right Panel */}
-          <Panel defaultSize={60} minSize={30} className="flex flex-col gap-4 min-h-0 pl-4">
+          <Panel defaultSize={60} minSize={30} className="flex flex-col gap-4 min-h-0 pl-4 relative">
+            <div className="absolute inset-0 bg-gradient-to-tl from-accent/5 to-accent-secondary/5 rounded-3xl -z-10 blur-xl"></div>
             
             {/* Top Bar */}
-            <div className="flex flex-wrap items-center justify-between gap-4 p-3 bg-background rounded-2xl shadow-inset-deep shrink-0">
+            <div className="flex flex-wrap items-center justify-between gap-4 p-3 bg-background/80 backdrop-blur-md rounded-2xl shadow-inset-deep shrink-0 border border-white/5">
               <LanguageSelector 
                 value={language} 
                 onChange={handleLanguageChange} 
@@ -246,8 +248,8 @@ export default function ChallengeWorkspacePage({ params }: { params: { id: strin
             </div>
 
             {/* Test Results Bottom Panel */}
-            <Card variant="extruded" className="h-[250px] shrink-0 flex flex-col overflow-hidden">
-              <div className="flex items-center justify-between border-b border-muted/10 px-4 py-2 bg-background/50">
+            <Card variant="extruded" className="h-[250px] shrink-0 flex flex-col overflow-hidden bg-background/80 backdrop-blur-md border-white/5">
+              <div className="flex items-center justify-between border-b border-muted/10 px-4 py-2 bg-background/40">
                 <h3 className="font-semibold text-sm">Test Results</h3>
                 {results && (
                   <div className="text-xs font-bold text-accent">
@@ -259,7 +261,7 @@ export default function ChallengeWorkspacePage({ params }: { params: { id: strin
                 {!results ? (
                   <div className="text-center text-muted mt-8 text-sm">Run or submit your code to see results here.</div>
                 ) : (
-                  <TestCaseResults results={results} sourceCode={sourceCode} language={language} challengeId={params.id} />
+                  <TestCaseResults results={results.results || []} sourceCode={sourceCode} language={language} challengeId={paramsId} />
                 )}
               </div>
             </Card>
@@ -375,7 +377,7 @@ export default function ChallengeWorkspacePage({ params }: { params: { id: strin
                 {!results ? (
                   <div className="text-center text-muted mt-8 text-sm">Run or submit your code to see results here.</div>
                 ) : (
-                  <TestCaseResults results={results} sourceCode={sourceCode} language={language} challengeId={params.id} />
+                  <TestCaseResults results={results.results || []} sourceCode={sourceCode} language={language} challengeId={paramsId} />
                 )}
               </div>
             </Card>

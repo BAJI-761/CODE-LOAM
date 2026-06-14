@@ -53,19 +53,21 @@ export default async function CoursesPage({ searchParams }: { searchParams: any 
 
   return (
     <div className="bg-background min-h-screen">
-      <PageHeader 
-        title="Course Catalog" 
-        description="Browse our collection of expert-led AI and coding courses."
-        breadcrumbs={
-          <div className="flex items-center gap-2">
-            <Link href="/" className="hover:text-foreground transition-colors">Home</Link>
-            <span>/</span>
-            <span className="text-foreground">Courses</span>
-          </div>
-        }
-      />
+      <Container className="pt-8 md:pt-12">
+        <PageHeader 
+          title="Course Catalog" 
+          description="Browse our collection of expert-led AI and coding courses."
+          breadcrumbs={
+            <div className="flex items-center gap-2">
+              <Link href="/" className="hover:text-foreground transition-colors">Home</Link>
+              <span>/</span>
+              <span className="text-foreground">Courses</span>
+            </div>
+          }
+        />
+      </Container>
       
-      <Section className="py-8 md:py-12">
+      <Section className="pb-8 md:pb-12 pt-0 md:pt-0">
         <Container>
           <div className="flex flex-col md:flex-row gap-8">
             {/* Sidebar Filters */}

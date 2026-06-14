@@ -15,7 +15,7 @@ export default function LearnIndexPage({ params }: { params: any }) {
     queryKey: ['courseLearn', courseId],
     queryFn: async () => {
       const res = await api.get(`/courses/${courseId}/learn`)
-      return res.data.data
+      return res.data || null
     }
   })
 

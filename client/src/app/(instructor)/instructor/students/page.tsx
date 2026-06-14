@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
 import { Users, Search, ChevronDown, ChevronUp, Mail } from "lucide-react"
+import { EmptyState } from "@/components/ui/empty-state"
 
 interface Progress {
   courseId: string;
@@ -175,8 +176,18 @@ export default function StudentManagementPage() {
               <tbody className="divide-y divide-muted/10">
                 {filteredStudents.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="px-6 py-12 text-center text-muted">
-                      No students found matching your criteria.
+                    <td colSpan={5} className="p-0 border-b-0">
+                      <EmptyState
+                        icon={<Users className="h-8 w-8 text-muted" />}
+                        title="No Students Found"
+                        description={searchTerm || selectedCourse !== 'all' ? "No students match your current filters. Try clearing them." : "You don't have any students enrolled in your courses yet."}
+                        action={
+                          (searchTerm || selectedCourse !== 'all') ? (
+                            <Button variant="default" onClick={() => { setSearchTerm(""); setSelectedCourse("all") }}>Clear Filters</Button>
+                          ) : undefined
+                        }
+                        className="my-8 border-0 rounded-none bg-transparent"
+                      />
                     </td>
                   </tr>
                 ) : (

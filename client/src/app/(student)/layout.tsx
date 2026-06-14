@@ -5,6 +5,7 @@ import { ProtectedRoute } from "@/components/auth/ProtectedRoute"
 import { RoleGuard } from "@/components/auth/RoleGuard"
 import { AIChatButton } from "@/components/ai/AIChatButton"
 import { AIChatPanel } from "@/components/ai/AIChatPanel"
+import { Navbar } from "@/components/layout/navbar"
 
 export default function StudentLayout({
   children,
@@ -14,6 +15,7 @@ export default function StudentLayout({
   return (
     <ProtectedRoute>
       <RoleGuard allowedRoles={["student"]}>
+        <Navbar />
         {children}
         <AIChatButton />
         <AIChatPanel />

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { api } from "@/lib/api";
+import api from "@/lib/api";
 import { CertificateCard } from "@/components/certificates/CertificateCard";
 import dynamic from "next/dynamic";
 
@@ -32,7 +32,9 @@ export default function StudentCertificatesPage() {
     const fetchCertificates = async () => {
       try {
         const res = await (api.get('/certificates') as any);
-        if (res) {
+        if (res && res.data) {
+          setCertificates(res.data);
+        } else if (res && Array.isArray(res)) {
           setCertificates(res);
         }
       } catch (error) {

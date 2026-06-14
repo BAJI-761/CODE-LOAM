@@ -6,7 +6,7 @@ export function useCourses(params = {}) {
     queryKey: ['courses', params],
     queryFn: async () => {
       const res = await api.get('/courses', { params });
-      return res.data.data;
+      return res.data;
     }
   });
 }
@@ -16,7 +16,7 @@ export function useCourse(id: string) {
     queryKey: ['course', id],
     queryFn: async () => {
       const res = await api.get(`/courses/${id}`);
-      return res.data.data;
+      return res.data;
     },
     enabled: !!id
   });
@@ -27,7 +27,7 @@ export function useEnroll() {
   return useMutation({
     mutationFn: async (courseId: string) => {
       const res = await api.post(`/courses/${courseId}/enroll`);
-      return res.data.data;
+      return res.data;
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['courses'] });
@@ -47,7 +47,7 @@ export function useUpdateProgress() {
   return useMutation({
     mutationFn: async ({ courseId, lessonId, completed }: UpdateProgressPayload) => {
       const res = await api.put(`/courses/${courseId}/progress`, { lessonId, completed });
-      return res.data.data;
+      return res.data;
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['course'] });
@@ -60,8 +60,8 @@ export function useMyEnrollments() {
   return useQuery({
     queryKey: ['myEnrollments'],
     queryFn: async () => {
-      const res = await api.get('/student/enrollments');
-      return res.data.data;
-    }
+      const res = await api.get('/enrollments/my-courses');
+      return res.data || [];
+    },
   });
 }

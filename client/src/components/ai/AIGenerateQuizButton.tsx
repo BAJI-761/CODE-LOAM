@@ -18,8 +18,8 @@ export function AIGenerateQuizButton({ onQuestionsGenerated }: { onQuestionsGene
     setIsLoading(true);
     try {
       const res = await api.post('/ai/generate-quiz', { topic, difficulty, questionCount: count });
-      if (res.data.data && res.data.data.questions) {
-        onQuestionsGenerated(res.data.data.questions);
+      if (res.data && res.data.questions) {
+        onQuestionsGenerated(res.data.questions);
         setIsOpen(false);
         setTopic('');
       }

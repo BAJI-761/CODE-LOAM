@@ -57,8 +57,8 @@ export default function LoginPage() {
     try {
       const response = await api.post("/auth/login", values)
       
-      if (response.data?.success && response.data?.data) {
-        const { token, user: userData } = response.data.data
+      if (response?.success && response?.data) {
+        const { token, user: userData } = response.data
         login(token, userData)
         toast.success("Successfully logged in!")
         
@@ -70,10 +70,10 @@ export default function LoginPage() {
           router.push("/dashboard")
         }
       } else {
-        toast.error(response.data?.message || "Failed to log in")
+        toast.error(response?.message || "Failed to log in")
       }
     } catch (error: any) {
-      const errorMessage = error.response?.data?.message || "Something went wrong. Please check your credentials."
+      const errorMessage = error?.message || "Something went wrong. Please check your credentials."
       toast.error(errorMessage)
     } finally {
       setSubmitting(false)

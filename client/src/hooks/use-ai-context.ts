@@ -44,12 +44,12 @@ export function useContextName(context: ChatContext) {
       
       if (context.type === 'challenge') {
         const res = await api.get(`/challenges/${context.referenceId}`);
-        return res.data.data?.title;
+        return res.data?.title;
       }
       
       if (context.type === 'course') {
         const res = await api.get(`/courses/${context.referenceId}`);
-        return res.data.data?.title;
+        return res.data?.title;
       }
       
       return null;

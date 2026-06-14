@@ -46,22 +46,24 @@ export function FeaturesSection() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {features.map((feature, i) => (
-            <Card key={i} variant="extruded" className="h-full">
-              <CardHeader>
-                <IconWell 
-                  icon={feature.icon} 
-                  variant={feature.color as any} 
-                  size="lg" 
-                  className="mb-4"
-                />
-                <CardTitle className="text-xl">{feature.title}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted">{feature.description}</p>
-              </CardContent>
-            </Card>
-          ))}
+          {features.map((feature, i) => {
+            const Icon = feature.icon;
+            return (
+              <Card key={i} variant="extruded" className="h-full">
+                <CardHeader>
+                  <IconWell 
+                    icon={<Icon className="h-8 w-8" />} 
+                    size="lg" 
+                    className="mb-4"
+                  />
+                  <CardTitle className="text-xl">{feature.title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted">{feature.description}</p>
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
       </Container>
     </Section>

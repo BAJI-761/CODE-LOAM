@@ -19,6 +19,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  transpilePackages: ["react-resizable-panels"],
 };
 
 export default nextConfig;

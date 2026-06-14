@@ -20,6 +20,7 @@ export default function CreateCourseWizard() {
     title: "",
     description: "",
     level: "beginner",
+    category: "",
     price: 0,
     tags: [] as string[],
     thumbnail: ""
@@ -61,6 +62,10 @@ export default function CreateCourseWizard() {
 
   const handleLevelChange = (value: string) => {
     setFormData(prev => ({ ...prev, level: value }))
+  }
+
+  const handleCategoryChange = (value: string) => {
+    setFormData(prev => ({ ...prev, category: value }))
   }
 
   const handleAddTag = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -107,10 +112,15 @@ export default function CreateCourseWizard() {
       return toast.error("Course title is required")
     }
 
+    if (!formData.category) {
+      return toast.error("Course category is required")
+    }
+
     setIsSubmitting(true)
     try {
       const res = await api.post('/instructor/courses', {
         ...formData,
+        difficulty: formData.level,
         price: Number(formData.price)
       })
 
@@ -171,6 +181,25 @@ export default function CreateCourseWizard() {
                   <SelectItem value="beginner">Beginner</SelectItem>
                   <SelectItem value="intermediate">Intermediate</SelectItem>
                   <SelectItem value="advanced">Advanced</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="category" className="text-base">Category <span className="text-red-500">*</span></Label>
+              <Select value={formData.category} onValueChange={handleCategoryChange}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select category" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="web-development">Web Development</SelectItem>
+                  <SelectItem value="data-science">Data Science</SelectItem>
+                  <SelectItem value="mobile-development">Mobile Development</SelectItem>
+                  <SelectItem value="devops">DevOps</SelectItem>
+                  <SelectItem value="algorithms">Algorithms</SelectItem>
+                  <SelectItem value="databases">Databases</SelectItem>
+                  <SelectItem value="ai-ml">AI & ML</SelectItem>
+                  <SelectItem value="system-design">System Design</SelectItem>
                 </SelectContent>
               </Select>
             </div>

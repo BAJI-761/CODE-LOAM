@@ -12,7 +12,7 @@ import { useUpdateProgress } from "@/hooks/useCourses"
 import { toast } from "sonner"
 import dynamic from 'next/dynamic'
 
-const ReactPlayer = dynamic(() => import('react-player/lazy'), { 
+const ReactPlayer = dynamic(() => import('react-player'), { 
   ssr: false,
   loading: () => <div className="w-full h-full min-h-[300px] flex items-center justify-center bg-muted/10"><Loader2 className="w-8 h-8 animate-spin text-muted" /></div>
 })
@@ -29,7 +29,7 @@ export default function LessonPage({ params }: { params: any }) {
     queryKey: ['courseLearn', courseId],
     queryFn: async () => {
       const res = await api.get(`/courses/${courseId}/learn`)
-      return res.data.data
+      return res.data || null
     }
   })
 

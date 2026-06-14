@@ -11,6 +11,13 @@ import { cn } from '@/lib/utils';
 export function AIChatPanel() {
   const { isPanelOpen, closePanel } = useAIStore();
   const context = useAIContext();
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
 
   return (
     <>

@@ -17,8 +17,8 @@ export default function ProgressPage() {
   const { data: progressData, isLoading } = useQuery({
     queryKey: ['progress'],
     queryFn: async () => {
-      const res = await api.get('/progress');
-      return res.data.data;
+      const res = await api.get('/progress/overview');
+      return res.data || null;
     },
   });
 

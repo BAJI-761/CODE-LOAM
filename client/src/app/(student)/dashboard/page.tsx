@@ -110,9 +110,9 @@ export default function StudentDashboard() {
             title="No courses yet"
             description="You haven't enrolled in any courses yet. Start your learning journey today!"
             action={
-              <Link href="/courses">
-                <Button variant="primary">Browse Courses</Button>
-              </Link>
+              <Button variant="primary" asChild>
+                <Link href="/courses">Browse Courses</Link>
+              </Button>
             }
           />
         )}

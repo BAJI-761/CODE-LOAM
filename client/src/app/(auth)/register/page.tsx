@@ -63,16 +63,16 @@ export default function RegisterPage() {
     try {
       const response = await api.post("/auth/register", values)
       
-      if (response.data?.success) {
+      if (response?.success) {
         toast.success("Registration successful! Redirecting to login...")
         setTimeout(() => {
           router.push("/login")
         }, 1500)
       } else {
-        toast.error(response.data?.message || "Failed to register")
+        toast.error(response?.message || "Failed to register")
       }
     } catch (error: any) {
-      const errorMessage = error.response?.data?.message || "Something went wrong. Please try again."
+      const errorMessage = error?.message || "Something went wrong. Please try again."
       toast.error(errorMessage)
     } finally {
       setSubmitting(false)

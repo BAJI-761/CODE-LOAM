@@ -35,6 +35,7 @@ export default function CreateChallengePage() {
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
   const [difficulty, setDifficulty] = useState("easy")
+  const [category, setCategory] = useState("arrays")
   const [activeLang, setActiveLang] = useState("javascript")
   
   const [starterCodes, setStarterCodes] = useState<Record<string, string>>({
@@ -65,9 +66,10 @@ export default function CreateChallengePage() {
         title,
         description,
         difficulty,
+        category,
         course: id,
         language: activeLang, // Currently the backend expects a specific language for a challenge
-        starterCode: starterCodes[activeLang],
+        starterCode: starterCodes,
         testCases: validTests
       })
       
@@ -136,6 +138,25 @@ export default function CreateChallengePage() {
                   <option value="easy">Easy</option>
                   <option value="medium">Medium</option>
                   <option value="hard">Hard</option>
+                </select>
+              </div>
+              <div className="space-y-2">
+                <Label>Category</Label>
+                <select 
+                  className="w-full flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  value={category}
+                  onChange={e => setCategory(e.target.value)}
+                >
+                  <option value="arrays">Arrays</option>
+                  <option value="strings">Strings</option>
+                  <option value="linked-lists">Linked Lists</option>
+                  <option value="trees">Trees</option>
+                  <option value="dynamic-programming">Dynamic Programming</option>
+                  <option value="sorting">Sorting</option>
+                  <option value="searching">Searching</option>
+                  <option value="math">Math</option>
+                  <option value="graphs">Graphs</option>
+                  <option value="recursion">Recursion</option>
                 </select>
               </div>
               <div className="space-y-2">

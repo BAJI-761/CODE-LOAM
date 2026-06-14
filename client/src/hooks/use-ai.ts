@@ -22,9 +22,10 @@ export function useChatHistory(context: ChatContext) {
       params.set('type', context.type);
       if (context.referenceId) params.set('referenceId', context.referenceId);
       const res = await api.get(`/ai/chat/history?${params}`);
-      return res.data.data?.messages || [];
+      return res.data?.messages || [];
     },
     staleTime: 30000,
+    enabled: typeof window !== 'undefined' && !!localStorage.getItem("token"),
   });
 }
 
@@ -35,7 +36,7 @@ export function useSendChatMessage() {
   return useMutation({
     mutationFn: async ({ message, context }: { message: string; context: ChatContext }) => {
       const res = await api.post('/ai/chat', { message, context });
-      return res.data.data;
+      return res.data;
     },
     onMutate: async ({ message, context }) => {
       const queryKey = ['chat-history', context.type, context.referenceId];
@@ -74,7 +75,7 @@ export function useAIHint() {
       language: string;
     }) => {
       const res = await api.post('/ai/hint', { challengeId, code, language });
-      return res.data.data;
+      return res.data;
     },
     onSuccess: (data, variables) => {
       queryClient.invalidateQueries({ queryKey: ['chat-history', 'challenge', variables.challengeId] });
@@ -93,7 +94,7 @@ export function useExplainError() {
       language: string;
     }) => {
       const res = await api.post('/ai/explain-error', { challengeId, code, error, language });
-      return res.data.data;
+      return res.data;
     },
     onSuccess: (data, variables) => {
       queryClient.invalidateQueries({ queryKey: ['chat-history', 'challenge', variables.challengeId] });
@@ -108,7 +109,7 @@ export function useAIStatus() {
     queryFn: async () => {
       try {
         const res = await api.get('/ai/status');
-        return res.data.data;
+        return res.data;
       } catch {
         return { available: false, demoMode: true };
       }

@@ -24,19 +24,21 @@ export default function MyCoursesPage() {
 
   return (
     <div className="bg-background min-h-screen">
-      <PageHeader 
-        title="My Courses" 
-        description="Continue learning and track your progress across all enrolled courses."
-        breadcrumbs={
-          <div className="flex items-center gap-2">
-            <Link href="/dashboard" className="hover:text-foreground transition-colors">Dashboard</Link>
-            <span>/</span>
-            <span className="text-foreground">My Courses</span>
-          </div>
-        }
-      />
+      <Container className="pt-8 md:pt-12">
+        <PageHeader 
+          title="My Courses" 
+          description="Continue learning and track your progress across all enrolled courses."
+          breadcrumbs={
+            <div className="flex items-center gap-2">
+              <Link href="/dashboard" className="hover:text-foreground transition-colors">Dashboard</Link>
+              <span>/</span>
+              <span className="text-foreground">My Courses</span>
+            </div>
+          }
+        />
+      </Container>
 
-      <Section className="py-8">
+      <Section className="pb-8 pt-0 md:pt-0">
         <Container>
           <Tabs defaultValue="all" onValueChange={setActiveTab} className="space-y-8">
             <TabsList>

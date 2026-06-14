@@ -39,7 +39,7 @@ export default function ChallengesPage() {
       // Backend sorting could be handled here or locally
       // Using generic endpoint for now
       const res = await api.get('/challenges', { params })
-      return res.data.data
+      return res.data || { items: [], total: 0 }
     }
   })
 
@@ -101,11 +101,16 @@ export default function ChallengesPage() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Categories</SelectItem>
-              <SelectItem value="fundamentals">Fundamentals</SelectItem>
-              <SelectItem value="algorithms">Algorithms</SelectItem>
-              <SelectItem value="data_structures">Data Structures</SelectItem>
-              <SelectItem value="frontend">Frontend</SelectItem>
-              <SelectItem value="backend">Backend</SelectItem>
+              <SelectItem value="arrays">Arrays</SelectItem>
+              <SelectItem value="strings">Strings</SelectItem>
+              <SelectItem value="linked-lists">Linked Lists</SelectItem>
+              <SelectItem value="trees">Trees</SelectItem>
+              <SelectItem value="dynamic-programming">Dynamic Programming</SelectItem>
+              <SelectItem value="sorting">Sorting</SelectItem>
+              <SelectItem value="searching">Searching</SelectItem>
+              <SelectItem value="math">Math</SelectItem>
+              <SelectItem value="graphs">Graphs</SelectItem>
+              <SelectItem value="recursion">Recursion</SelectItem>
             </SelectContent>
           </Select>
 

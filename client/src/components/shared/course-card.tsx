@@ -35,7 +35,7 @@ export function CourseCard({ course, variant = "default", progress }: CourseCard
       <Card variant="extruded" className="h-full flex flex-col group transition-all duration-300 hover:-translate-y-1">
         <div className="relative w-full aspect-video rounded-t-2xl overflow-hidden shadow-inset-sm m-2 w-[calc(100%-16px)]">
           <Image
-            src={course.thumbnailUrl || "https://picsum.photos/seed/codeloom/600/400"}
+            src={course.thumbnailUrl || "/assets/course-banner.png"}
             alt={course.title}
             fill
             className="object-cover transition-all duration-500 grayscale group-hover:grayscale-0 group-hover:scale-105"

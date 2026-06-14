@@ -15,7 +15,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-// import { ThemeToggle } from "@/components/ui/theme-toggle" // To be implemented or used later
+import { ThemeToggle } from "@/components/ui/theme-toggle"
 
 export function Navbar() {
   const { isAuthenticated, user, logout } = useAuthStore()
@@ -67,7 +67,7 @@ export function Navbar() {
         {/* Right: Actions */}
         <div className="flex items-center gap-4">
           <div className="hidden md:flex items-center gap-4">
-            {/* <ThemeToggle /> */}
+            <ThemeToggle />
             {mounted && (
               isAuthenticated ? (
                 <DropdownMenu>
@@ -118,7 +118,8 @@ export function Navbar() {
           </div>
 
           {/* Mobile Menu */}
-          <div className="md:hidden">
+          <div className="md:hidden flex items-center gap-2">
+            <ThemeToggle />
             <MobileMenu open={isOpen} onOpenChange={setIsOpen}>
               <MobileMenuTrigger asChild>
                 <Button variant="ghost" size="icon">

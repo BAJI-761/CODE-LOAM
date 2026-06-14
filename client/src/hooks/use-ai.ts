@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '@/lib/api';
+import { toast } from 'sonner';
 
 export interface ChatContext {
   type: 'general' | 'course' | 'challenge' | 'lesson';
@@ -22,7 +23,7 @@ export function useChatHistory(context: ChatContext) {
       params.set('type', context.type);
       if (context.referenceId) params.set('referenceId', context.referenceId);
       const res = await api.get(`/ai/chat/history?${params}`);
-      return res.data?.messages || [];
+      return res.data || [];
     },
     staleTime: 30000,
     enabled: typeof window !== 'undefined' && !!localStorage.getItem("token"),
@@ -57,10 +58,11 @@ export function useSendChatMessage() {
         ]);
       }
     },
-    onError: (err, variables, context) => {
+    onError: (err: any, variables, context) => {
       if (context?.queryKey && context?.previous) {
         queryClient.setQueryData(context.queryKey, context.previous);
       }
+      toast.error(err?.message || "Failed to send message");
     },
   });
 }

@@ -3,6 +3,7 @@ import { Send, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useSendChatMessage, ChatContext } from '@/hooks/use-ai';
+import { useAuthStore } from '@/stores/auth-store';
 
 interface AIChatInputProps {
   context: ChatContext;
@@ -11,6 +12,7 @@ interface AIChatInputProps {
 export function AIChatInput({ context }: AIChatInputProps) {
   const [input, setInput] = useState('');
   const { mutate: sendMessage, isPending } = useSendChatMessage();
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
   const handleSend = () => {
     if (!input.trim() || isPending) return;
@@ -33,9 +35,9 @@ export function AIChatInput({ context }: AIChatInputProps) {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Ask me anything..."
+          placeholder={isAuthenticated ? "Ask me anything..." : "Please log in to use AI"}
           className="flex-1 bg-transparent border-none outline-none px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground"
-          disabled={isPending}
+          disabled={isPending || !isAuthenticated}
         />
         <Button 
           size="icon" 
@@ -44,7 +46,7 @@ export function AIChatInput({ context }: AIChatInputProps) {
             input.trim() ? "bg-accent hover:bg-accent/90" : "bg-muted text-muted-foreground shadow-none"
           )}
           onClick={handleSend}
-          disabled={!input.trim() || isPending}
+          disabled={!input.trim() || isPending || !isAuthenticated}
         >
           {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4 ml-0.5" />}
         </Button>

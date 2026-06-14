@@ -57,7 +57,7 @@ const LESSON_TYPES = ['video', 'text', 'resource'];
 
 const ASSIGNMENT_STATUSES = ['submitted', 'graded', 'returned'];
 
-const CHAT_CONTEXT_TYPES = ['course', 'challenge', 'general'];
+const CHAT_CONTEXT_TYPES = ['course', 'challenge', 'general', 'lesson'];
 
 module.exports = {
   COURSE_CATEGORIES,

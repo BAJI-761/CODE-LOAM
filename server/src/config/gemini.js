@@ -9,8 +9,8 @@ let isAvailable = false;
 
 function initGemini() {
   const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) {
-    console.warn('⚠️  Gemini API key not set — AI will use mock responses');
+  if (!apiKey || apiKey.length <= 20 || apiKey.includes('your_api_key_here')) {
+    console.warn('⚠️  Gemini API key not set or invalid — AI will use mock responses');
     return;
   }
 
@@ -24,7 +24,7 @@ function initGemini() {
 
 function getModel() {
   if (!genAI) return null;
-  const modelName = process.env.GEMINI_MODEL || 'gemini-1.5-flash';
+  const modelName = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
   return genAI.getGenerativeModel({ model: modelName });
 }
 

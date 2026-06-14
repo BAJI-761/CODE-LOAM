@@ -73,7 +73,11 @@ If context is provided, tailor your response to it: ${JSON.stringify(context)}.`
       return responseText;
     } catch (error) {
       console.error('Error in askDoubtAssistant:', error);
-      throw error;
+      const errorMsg = "[Error] AI service is currently unavailable. " + (error.message || "Please try again later.");
+      historyDoc.messages.push({ role: 'user', content: message });
+      historyDoc.messages.push({ role: 'assistant', content: errorMsg });
+      await historyDoc.save();
+      return errorMsg;
     }
   },
 

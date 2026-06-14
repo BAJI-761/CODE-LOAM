@@ -22,18 +22,35 @@ interface CertificateDownloadProps {
 
 export function CertificateDownload({ certificate }: CertificateDownloadProps) {
   const certRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [isDownloading, setIsDownloading] = useState(false);
+  const [scale, setScale] = useState(0.5);
+
+  useEffect(() => {
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        // Calculate scale needed to fit 1123px into the container width
+        const newScale = Math.min(1, entry.contentRect.width / 1123);
+        setScale(newScale);
+      }
+    });
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
 
   const handleDownload = async () => {
     if (!certRef.current) return;
     setIsDownloading(true);
 
     try {
-      // Small timeout to ensure fonts and styles are fully loaded
       await new Promise(resolve => setTimeout(resolve, 100));
 
       const canvas = await html2canvas(certRef.current, {
-        scale: 2, // High resolution
+        scale: 2,
         useCORS: true,
         backgroundColor: '#FEFCF8',
         logging: false,
@@ -67,12 +84,17 @@ export function CertificateDownload({ certificate }: CertificateDownloadProps) {
   const formattedDate = format(new Date(certificate.issuedAt), 'MMMM d, yyyy');
 
   return (
-    <div className="flex flex-col items-center gap-6">
-      <div className="w-full max-w-4xl overflow-hidden rounded-xl shadow-2xl bg-[#FEFCF8]">
+    <div className="flex flex-col items-center gap-6 w-full">
+      <div 
+        ref={containerRef}
+        className="w-full max-w-4xl overflow-hidden rounded-xl shadow-2xl bg-[#FEFCF8]"
+      >
         <div className="w-full" style={{ aspectRatio: '1123/794' }}>
-          {/* We scale the template via CSS transform to fit its container while maintaining 1123x794 native resolution for html2canvas */}
           <div className="relative w-full h-full">
-            <div className="absolute top-0 left-0 origin-top-left" style={{ transform: 'scale(var(--scale-factor, 0.5))', width: '1123px', height: '794px' }}>
+            <div 
+              className="absolute top-0 left-0 origin-top-left" 
+              style={{ transform: `scale(${scale})`, width: '1123px', height: '794px' }}
+            >
                <CertificateTemplate
                 ref={certRef}
                 studentName={certificate.student.name || 'Student'}
@@ -83,17 +105,6 @@ export function CertificateDownload({ certificate }: CertificateDownloadProps) {
                 grade={certificate.grade || 'C'}
               />
             </div>
-            {/* Inline script hack to auto-scale the fixed size certificate to container width, avoiding ResizeObserver complex setups for this simple usecase */}
-            <style dangerouslySetInnerHTML={{__html: `
-              .w-full > .relative > .origin-top-left {
-                --scale-factor: min(1, calc(100vw / 1200));
-              }
-              @media (min-width: 896px) {
-                .w-full > .relative > .origin-top-left {
-                  --scale-factor: calc(896 / 1123);
-                }
-              }
-            `}} />
           </div>
         </div>
       </div>

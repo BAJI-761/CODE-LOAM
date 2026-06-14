@@ -89,9 +89,9 @@ exports.getCertificates = asyncHandler(async (req, res) => {
   res.json(new ApiResponse(200, certificates, 'Certificates fetched'));
 });
 
-// GET /api/v1/certificates/verify/:certificateId (Public)
+// GET /api/v1/certificates/verify/:id (Public)
 exports.verifyCertificate = asyncHandler(async (req, res) => {
-  const certificate = await Certificate.findOne({ certificateId: req.params.certificateId })
+  const certificate = await Certificate.findOne({ certificateId: req.params.id })
     .populate('student', 'name email')
     .populate('course', 'title category difficulty');
 

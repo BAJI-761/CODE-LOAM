@@ -24,7 +24,7 @@ export default function StudentDashboard() {
       const courseTotalMins = e.course.modules.reduce((acc: number, mod: any) => {
         return acc + mod.lessons.reduce((lAcc: number, l: any) => lAcc + (l.duration || 0), 0)
       }, 0)
-      totalLearningHours += (courseTotalMins * (e.progressPercentage / 100)) / 60
+      totalLearningHours += (courseTotalMins * ((e.completionPercentage || 0) / 100)) / 60
     }
   })
 

@@ -11,7 +11,9 @@ export interface EnrolledCourseCardProps {
 }
 
 export function EnrolledCourseCard({ enrollment }: EnrolledCourseCardProps) {
-  const { course, progressPercentage, isCompleted } = enrollment
+  const { course, completionPercentage, status } = enrollment
+  const isCompleted = status === 'completed' || completionPercentage === 100
+  const progressValue = completionPercentage || 0
 
   if (!course) return null
 
@@ -49,26 +51,25 @@ export function EnrolledCourseCard({ enrollment }: EnrolledCourseCardProps) {
             <div className="flex justify-between text-xs font-medium">
               <span className="text-muted">Overall Progress</span>
               <span className={isCompleted ? "text-accent-secondary" : "text-foreground"}>
-                {Math.round(progressPercentage)}%
+                {Math.round(progressValue)}%
               </span>
             </div>
             <Progress 
-              value={progressPercentage} 
+              value={progressValue} 
               className="h-2" 
               indicatorClassName={isCompleted ? "bg-accent-secondary" : "bg-accent"} 
             />
           </div>
           
-          <Button 
-            variant={isCompleted ? "inset" : "accent"} 
-            className="w-full relative overflow-hidden"
-            asChild
-          >
-            <Link href={`/courses/${course._id}/learn`}>
-              <PlayCircle className="h-4 w-4 mr-2" />
-              {isCompleted ? "Review Course" : progressPercentage > 0 ? "Continue Learning" : "Start Course"}
-            </Link>
-          </Button>
+          <Link href={`/courses/${course._id}/learn`} className="w-full block">
+            <Button 
+              className="w-full rounded-xl" 
+              variant={isCompleted ? "outline" : "default"}
+            >
+              <PlayCircle className="w-4 h-4 mr-2" />
+              {isCompleted ? "Review Course" : progressValue > 0 ? "Continue Learning" : "Start Course"}
+            </Button>
+          </Link>
         </div>
       </CardContent>
     </Card>
